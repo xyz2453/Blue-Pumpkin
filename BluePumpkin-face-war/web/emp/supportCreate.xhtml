@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="top">
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <style>
+                #createPanel {
+                    width: 900px;
+                    margin: 0 auto;
+                }
+                #createPanel td {
+                    padding: 13px;
+                }
+                #createPanel input[type=text] {
+                    width: 350px;
+                }
+                #createPanel input[type=submit] {
+                    width: 90px;
+                    padding: 10px;
+                }
+            </style>
+            <div id="createPanel">
+                <h2>Create support ticket</h2>
+                <table>
+                    <tr>
+                        <td>Title</td>
+                        <td>
+                            <h:inputText value="#{title}" required="true" requiredMessage="Title is required"
+                                         validatorMessage="Title must have between 10 and 100 characters">
+                                <f:validateLength minimum="10" maximum="100"/>
+                            </h:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Content</td>
+                        
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h:inputTextarea style="resize: none;" rows="15" cols="100" value="#{content}"
+                                             validatorMessage="Content can only have 10 000 characters">
+                                <f:validateLength maximum="10000"/>
+                            </h:inputTextarea>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">
+                            <h:commandButton value="Request" action="#{empSupportMb.createSupport(title, content)}"/>
+                        </td>
+                    </tr>
+                </table>
+                <h:messages/>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

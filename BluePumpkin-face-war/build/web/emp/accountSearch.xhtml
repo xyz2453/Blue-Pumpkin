@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="top">
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+        <style>
+            #resultBox {
+                width: 1000px;
+                padding: 10px;
+                text-align: center;
+                margin: 0 auto;
+            }
+            #searchBox {
+                margin: 0 auto;
+                width: 1000px;
+                padding: 20px;
+                text-align: center;
+                border-bottom: 1px solid #999999;
+            }
+            #searchBox table {
+                width: 100%;
+            }
+            #searchBox td {
+                padding: 5px;
+                text-align: left;
+            }
+            #searchBox input[type=text] {
+                outline: none;
+                padding: 5px;
+                width: 150px;
+                height: 20px;
+                box-shadow: none;
+            }
+            #searchBox input[type=submit] {
+                padding: 10px;
+                width: 200px;
+            }
+        </style>
+        <div id="searchPanel">
+            <div id="searchBox">
+                <h2>Employee Search</h2>
+                <table>
+                    <tr>
+                        <td>Username</td>
+                        <td style="width: 35%;">
+                            <h:inputText value="#{empPanelMb.searchInput.username}"/>
+                        </td>
+                        
+                        <td>Department</td>
+                        <td style="width: 35%;">
+                            <h:selectOneMenu value="#{empPanelMb.searchInput.searchDepartmentID}">
+                                <f:selectItems value="#{empPanelMb.findAllDepartment()}" var="item"
+                                               itemLabel="#{item.departmentName}" itemValue="#{item.departmentID}" />
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>
+                            <h:selectOneRadio value="#{empPanelMb.searchInput.gender}">
+                                <f:selectItem itemValue="#{true}" itemLabel="Male" />
+                                <f:selectItem itemValue="#{false}" itemLabel="Female" />
+                            </h:selectOneRadio>
+                        </td>
+                        
+                        <td>Admin</td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{empPanelMb.searchInput.isadmin}" /> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fullname</td>
+                        <td>
+                            <h:inputText value="#{empPanelMb.searchInput.fullname}"/>
+                        </td>
+                        
+                        <td>Birthday</td>
+                        <td>
+                            <p:calendar id="popup" value="#{empPanelMb.searchInput.birthday}" 
+                                        pattern="dd/MM/yyyy"/>
+                            * dd/mm/yyyy
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>
+                            <h:inputText value="#{empPanelMb.searchInput.address}"/>
+                        </td>
+                        
+                        <td>Email</td>
+                        <td>
+                            <h:inputText value="#{empPanelMb.searchInput.email}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>
+                            <h:inputText value="#{empPanelMb.searchInput.phone}"/>
+                        </td>                
+                    </tr>
+                    <tr style="">
+                        <td colspan="2" style="text-align:right;padding-top: 20px;">
+                            <h:commandButton action="#{empPanelMb.searchEmployee()}" value="Search"/>
+                        </td>
+                        <td colspan="2" style="text-align:left;padding-top: 20px;">
+                            <h:commandButton action="#{empPanelMb.searchAllEmployee()}" value="Search all"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="resultBox">
+                <style>
+                    .result-table {
+                        margin: 40px;
+                        width: 100%;
+                    }
+                    .result-table td {
+                        padding: 5px;
+                        text-align: left;
+                    }
+                    .result-table-header {
+                        background: #f9fbff;
+                        width: 16%;
+                        padding: 10px;
+                    }
+                </style>
+                <h2>Result</h2>
+                <h:outputText value="Displaying #{empPanelMb.searchResult.size()} result(s)"/>
+                <h:dataTable value="#{empPanelMb.searchResult}" var="o"
+    			styleClass="result-table"
+    			headerClass="result-table-header"
+    			rowClasses="result-table-odd-row,result-table-even-row"
+    		>
+
+                    <h:column>
+                            <!-- column header -->
+                            <f:facet name="header">Username</f:facet>
+                            <!-- row record -->
+                            #{o.username}
+                    </h:column>
+
+                    <h:column>
+                            <f:facet name="header">Fullname</f:facet>
+                            #{o.fullname}
+                    </h:column>
+
+                    <h:column>
+                            <f:facet name="header">Birthday</f:facet>
+                            #{empPanelMb.getSimpleDate(o.birthday)}
+                    </h:column>
+
+                    <h:column>
+                            <f:facet name="header">Email</f:facet>
+                            #{o.email}
+                    </h:column>
+
+                    <h:column>
+                            <f:facet name="header">Gender</f:facet>
+                            #{empPanelMb.convertBooleanToGender(o.gender)}
+                    </h:column>
+                    
+                    <h:column>
+                            <f:facet name="header"></f:facet>
+                            <h:link outcome="accountDetail" value="Detail" >
+                                <f:param name="id" value="#{o.username}" />
+                             </h:link> 
+                    </h:column>
+    		</h:dataTable>
+            </div>
+        </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

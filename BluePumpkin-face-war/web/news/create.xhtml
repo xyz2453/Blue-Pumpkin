@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="top">
+    </ui:define>
+
+    <ui:define name="content">
+        <c:if test="#{not loginMb.curAccount.role}">
+            #{newsMb.redirect("index.xhtml")}
+        </c:if>
+        <style>
+            #createPanel {
+                padding: 30px 0 0 0;
+            }
+            #createTable {
+                margin: 0 auto;
+                width: 90%;
+            }
+            #createTable td {
+                padding: 10px;
+            }
+            #createTable input[type=text] {
+                width: 400px;
+            }
+        </style>
+        <h:form id="form1" enctype="multipart/form-data">
+            
+            <div id="createPanel">
+                <table id="createTable">
+                    <tr>
+                        <td colspan="2">
+                           <h2>News creator</h2> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100px;">Title</td>
+                        <td>
+                            <h:inputText id="createTitle" value="#{createTitle}" required="true" 
+                                         requiredMessage="Title is required"
+                                         validatorMessage="Title's maximum character count is: 200">
+                                <f:validateLength maximum="199" />
+                            </h:inputText>
+                            <h:message id="m1" for="createTitle" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Thumbnail</td>
+                        <td>
+                            <h:inputFile value="#{createUpload}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h:inputTextarea id="editor1" value="#{createContent}"
+                                             validatorMessage="Content's maximum character count is: 10000">
+                                <f:validateLength maximum="10000" />
+                            </h:inputTextarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center; padding-top: 30px;">
+                            <h:commandButton value="Insert" action="#{newsMb.createNews(loginMb.curAccount, createTitle, createUpload, createContent)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h:message id="m2" for="editor1" style="color:red"/>
+                        </td>
+                    </tr>
+                </table>
+            </div> 
+        </h:form>
+        
+        <h:outputScript name="js/ckeditor/ckeditor.js" />
+        <script>
+            window.onload = function() {
+                CKEDITOR.replace( 'form1:editor1');
+            };
+        </script>
+    </ui:define>
+
+</ui:composition>

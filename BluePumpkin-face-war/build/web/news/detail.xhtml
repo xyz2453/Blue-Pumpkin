@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="top">
+        
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form1">
+        <f:event type="preRenderView" listener="#{newsMb.getDetail(request.getParameter('id'))}"></f:event>
+        
+        <style>
+                #newsHeader {
+                    margin: 30px auto;
+                    width: 900px;
+                    border-bottom: 1px solid #d1d1e0;
+                }
+                #newsTitle {
+                    margin: 0 auto;
+                    width: 900px;
+                    font-weight: bold;
+                    font-size: 1cm;
+                }
+                #newsThumbnail {
+                    padding-top: 15px;
+                    padding-bottom: 15px;
+                    text-align: center;
+                }
+                #newsAuthor {
+                    margin: 0 auto;
+                    width: 900px;
+                    color: #aab6aa;
+                    padding: 3px;
+                    padding-bottom: 5px;
+                    font-size: 0.4cm;
+                }
+                #newsContent {
+                    
+                    margin: 20px auto;
+                    max-width: 700px;
+                    padding-bottom: 30px;
+                    border-bottom: 1px solid #d1d1e0;
+                    font-size: 16px;
+                }
+                #newsRecent {
+                    max-width: 700px;
+                    padding-top: 30px;
+                    margin: 0 auto;
+                    
+                    font-size: 14px;
+                }
+                
+                .recenctNewsItem {
+                    font-size: 12px;
+                    color: #660033;
+                    text-decoration: none;
+                }
+                
+                #form1\:editButton {
+                    font-size: 15px;
+                    vertical-align: middle;
+                    text-decoration: none;
+                    background: #0099cc;
+                    color: white;
+                }
+                #buttonDiv {
+                    padding:10px;
+                    background: #0099cc;
+                    width: 300px; 
+                    margin: 0 auto;
+                    text-align: center
+                }
+            </style>
+            <div id="newsHeader">
+                
+                <div id="newsTitle">
+                #{newsMb.selectedNews.getNewsTitle()}
+                </div>
+                <div id="newsAuthor">
+                Posted at #{newsMb.getSimpleDate(newsMb.selectedNews.getNewsID())} by #{newsMb.selectedNews.getUsername().getFullname()}
+                </div>
+            </div>
+            <div id="newsThumbnail">
+                <img src="#{newsMb.selectedNews.getNewsThumbnail()}" style="height: 300px;"/>
+            </div>
+            <div id="newsContent">
+                <h:outputText escape="false" value="#{newsMb.selectedNews.getNewsContent()}"/>
+                
+            </div>
+        <c:if test="${loginMb.curAccount!=null and loginMb.curAccount.getRole()}">
+                <div style="padding-top: 30px;"></div>
+                <div id="buttonDiv" style="">
+                    <a style="color: whitesmoke;" href="#{request.contextPath}/news/edit.xhtml?selectedNewsID=#{newsMb.selectedNews.getNewsID()}">Edit</a>               
+                </div>
+            </c:if>
+            <div id="newsRecent">
+                Older news
+                <ul>
+                    <ui:repeat var="item" value="${newsMb.detailOlderNews}">
+                        <li><a class="recenctNewsItem" href="#{request.contextPath}/news/detail.xhtml?id=#{item.getNewsID()}">${item.getNewsTitle()}</a></li>
+                    </ui:repeat>
+                </ul>
+            </div>
+         </h:form>
+    </ui:define>
+
+</ui:composition>

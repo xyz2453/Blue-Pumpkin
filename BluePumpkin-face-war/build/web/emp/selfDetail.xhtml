@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="top">
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+        <style>
+            #profilePanel {
+                width: 900px;
+                margin: 0 auto;
+                text-align: center;
+            }
+            
+            #profilePanel table td{
+                padding: 5px;
+                text-align: left;
+                font-size: 15px;
+            }
+            
+            #profilePanel input[type=submit] {
+                padding: 15px;
+                width: 200px;
+            }
+            
+            #profilePanel input[type=text]{
+                width: 200px;
+                box-shadow: none;
+                padding: 5px;
+                height: 30px;
+                border-radius: 1px;
+                border-collapse: separate;
+                border: 1px solid #8f8f8f;
+                font-size: 13px;
+            }
+            
+            #detailPanel {
+                width: 100%;
+                padding: 25px;
+                border: 1px #999999 solid;
+                border-radius: 13px;
+            }
+            #passwordPanel {
+                margin: 25px 0;
+                width: 100%;
+                padding: 25px;
+                border: 1px #999999 solid;
+                border-radius: 13px;
+                
+            }
+        </style>
+        <div style="visibility: hidden;">#{empPanelMb.updateAccount = loginMb.curAccount}</div>
+        <div id="profilePanel">
+            <div id="detailPanel">
+                <h2>Profile</h2>
+                <table>
+                    <tr>
+                        <td style="width: 250px;">Username</td>
+                        <td>
+                            <h:outputLabel value="#{empPanelMb.updateAccount.username}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Department</td>
+                        <td>
+                            <h:selectOneMenu value="#{empPanelMb.updateDepartmentID}">
+                                <f:selectItems value="#{empPanelMb.findAllDepartment()}" var="item"
+                                               itemLabel="#{item.departmentName}" itemValue="#{item.departmentID}" />
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Role</td>
+                        <td>
+                            <h:outputLabel value="#{empPanelMb.getRoleName()}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fullname</td>
+                        <td>
+                            <h:inputText id="fullname" value="#{empPanelMb.updateAccount.fullname}"
+                                         validatorMessage="Maximum character for Fullname is 50">
+                                <f:validateLength maximum="50" />
+                            </h:inputText>
+                        </td>
+                        <td><h:message for="fullname" style="color:red" /></td>
+                    </tr>
+                    <tr>
+                        <td>Birthday</td>
+                        <td>
+                            <p:calendar id="popup" value="#{empPanelMb.updateAccount.birthday}" 
+                                        pattern="dd/MM/yyyy"
+                                        required="true"
+                                        requiredMessage="You must choose a birthday"/>
+                            * dd/mm/yyyy
+                        </td>
+                        <td><h:message for="popup" style="color:red" /></td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>
+                            <h:inputText id="address" value="#{empPanelMb.updateAccount.address}"
+                                         validatorMessage="Maximum character for Address is 100.">
+                                <f:validateLength maximum="100" />
+                            </h:inputText>
+                        </td>
+                        <td><h:message for="address" style="color:red" /></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>
+                            <h:inputText id="email" value="#{empPanelMb.updateAccount.email}"
+                                         validatorMessage="This is not a valid email.">
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </h:inputText>
+                        </td>
+                        <td><h:message for="email" style="color:red" /></td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>
+                            <h:inputText id="phone" value="#{empPanelMb.updateAccount.phone}" 
+                                         validatorMessage="Phone can only have number and the maximum character is 13">
+                                <f:validateRegex pattern="^[0-9]{0,13}$" />
+                            </h:inputText>
+                        </td>
+                        <td><h:message for="phone" style="color:red" /></td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>
+                            <h:selectOneRadio value="#{empPanelMb.updateAccount.gender}">
+                                <f:selectItem itemValue="#{true}" itemLabel="Male" />
+                                <f:selectItem itemValue="#{false}" itemLabel="Female" />
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <h:commandButton action="#{empPanelMb.updateProfile()}" value="Update profile"/>
+                        </td>
+                        
+                    </tr>
+                </table>
+            </div>
+            <div id="passwordPanel">
+                <h2>Change password</h2>
+                <table>
+                    <tr>
+                        <td style="width: 250px">Old password:</td>
+                        <td>
+                            <h:inputSecret value="#{oldPassword}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>New password:</td>
+                        <td>
+                            <h:inputSecret value="#{newPassword}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Repeat new password:</td>
+                        <td>
+                            <h:inputSecret value="#{repeatPassword}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h:commandButton action="#{empPanelMb.changePassword(oldPassword, newPassword, repeatPassword)}" value="Change password"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="margin:auto auto 30px auto; font-size: 15px; font-weight: bold; color: #00c;">
+                #{empPanelMb.message}
+            </div>
+            
+        </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

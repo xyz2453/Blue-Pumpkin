@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="top">
+        
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+        <style>
+            .supportPanel {
+                padding: 10px;
+                margin: 20px auto 20px auto;
+            }
+            .supportPanel input[type=text] {
+                outline: none;
+                padding: 5px;
+                width: 150px;
+                height: 20px;
+                box-shadow: none;
+            }
+            .searchBox {
+                margin: 20px auto 20px auto;
+            }
+            .searchBox td {
+                padding-right: 30px;
+            }
+            .resultTable {
+                margin: auto auto 20px auto;
+                padding-bottom: 10px;
+            }
+            
+            .result-table-header {
+                padding: 10px;
+                background: #f9fbff;
+            }
+            .col1 {
+                min-width: 30px;
+            }
+            .col2 {
+                min-width: 200px;
+            }
+            .col3 {
+                min-width: 700px;
+            }
+        </style>
+        <div style="width:350px;margin:0 auto">
+            <a href="#{request.contextPath}/emp/supportCreate.xhtml">Request new support ticket</a>
+        </div>
+        <div class="supportPanel">
+            <h2>Unresolved</h2>
+            <div class="searchBox">
+                <h:messages/>
+                <table>
+                    <tr>
+                        <td>Search</td>
+                        <td>
+                            <h:inputText value="#{empSupportMb.searchUnresolvedInput.searchString}"/>
+                        </td>
+                        <td>From</td>
+                        <td>
+                            <p:calendar id="ufrom" value="#{empSupportMb.searchUnresolvedInput.searchFrom}" 
+                                        pattern="dd/MM/yyyy" validatorMessage="Invalid From date.."/>
+                        </td>
+                        <td>To</td>
+                        <td>
+                            <p:calendar id="uto" value="#{empSupportMb.searchUnresolvedInput.searchTo}" 
+                                        pattern="dd/MM/yyyy" validatorMessage="Invalid To date.." />
+                            * dd/mm/yyyy
+                        </td>
+                        <td>
+                            <h:commandButton value="Search" action="#{empSupportMb.searchUnresolved()}"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="resultTable">
+                <h:outputText value="Displaying #{empSupportMb.unresolved.size()} result(s)"/>
+                <h:dataTable value="#{empSupportMb.unresolved}" var="o"
+    			styleClass="result-table"
+    			headerClass="result-table-header"
+    			rowClasses="result-table-odd-row,result-table-even-row"
+                        columnClasses="col1,col2,col3,col4">
+
+                    <h:column>
+                            <!-- column header -->
+                            <f:facet name="header">ID</f:facet>
+                            <!-- row record -->
+                            #{o.supportID}
+                    </h:column>
+
+                    <h:column>
+                            <f:facet name="header">Date</f:facet>
+                            #{empSupportMb.getSimpleDateWithTime(o.dateCreate)}
+                    </h:column>
+
+                    <h:column>
+                            <f:facet name="header">Title</f:facet>
+                            #{o.supportTitle}
+                    </h:column>
+                    
+                    <h:column>
+                            <f:facet name="header"></f:facet>
+                            <h:link outcome="supportDetail" value="Detail" >
+                                <f:param name="id" value="#{o.supportID}" />
+                             </h:link> 
+                    </h:column>
+    		</h:dataTable>
+            </div>
+        </div>
+        <div class="supportPanel">
+            <h2>Resolved</h2>
+            <div class="searchBox">
+                <table>
+                    <tr>
+                        <td>Search</td>
+                        <td>
+                            <h:inputText value="#{empSupportMb.searchResolvedInput.searchString}"/>
+                        </td>
+                        <td>From</td>
+                        <td>
+                            <p:calendar value="#{empSupportMb.searchResolvedInput.searchFrom}" 
+                                        pattern="dd/MM/yyyy" validatorMessage="Invalid From date.."/>
+                        </td>
+                        <td>To</td>
+                        <td>
+                            <p:calendar value="#{empSupportMb.searchResolvedInput.searchTo}" 
+                                        pattern="dd/MM/yyyy"  validatorMessage="Invalid To date.."/>
+                            * dd/mm/yyyy
+                        </td>
+                        <td>
+                            <h:commandButton value="Search" action="#{empSupportMb.searchResolved()}"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="resultTable">
+                <h:outputText value="Displaying #{empSupportMb.resolved.size()} result(s)"/>
+                <h:dataTable value="#{empSupportMb.resolved}" var="o"
+    			styleClass="result-table"
+    			headerClass="result-table-header"
+    			rowClasses="result-table-odd-row,result-table-even-row"
+                        columnClasses="col1,col2,col3,col4">
+
+                    <h:column>
+                            <!-- column header -->
+                            <f:facet name="header">ID</f:facet>
+                            <!-- row record -->
+                            #{o.supportID}
+                    </h:column>
+
+                    <h:column>
+                            <f:facet name="header">Date</f:facet>
+                            #{empSupportMb.getSimpleDateWithTime(o.dateCreate)}
+                    </h:column>
+
+                    <h:column>
+                            <f:facet name="header">Title</f:facet>
+                            #{o.supportTitle}
+                    </h:column>
+                    
+                    <h:column>
+                            <f:facet name="header"></f:facet>
+                            <h:link outcome="supportDetail" value="Detail" >
+                                <f:param name="id" value="#{o.supportID}" />
+                             </h:link> 
+                    </h:column>
+    		</h:dataTable>
+            </div>
+            
+        </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

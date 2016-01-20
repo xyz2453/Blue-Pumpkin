@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="top">
+    </ui:define>
+
+    <ui:define name="content">
+        <c:if test="#{request.getParameter('id') != null}">
+            #{empPanelMb.findAndSetDetail(request.getParameter('id'))}
+        </c:if>
+        <style>
+            #profilePanel {
+                width: 900px;
+                margin: 0 auto;
+                text-align: center;
+            }
+            
+            #profilePanel table td{
+                padding: 5px;
+                text-align: left;
+                font-size: 15px;
+            }
+            
+            #profilePanel input[type=submit] {
+                padding: 15px;
+                width: 200px;
+            }
+            
+            #profilePanel input[type=text]{
+                width: 200px;
+                box-shadow: none;
+                padding: 5px;
+                height: 30px;
+                border-radius: 1px;
+                border-collapse: separate;
+                border: 1px solid #8f8f8f;
+                font-size: 13px;
+            }
+            
+            #detailPanel {
+                margin: 100px auto 100px auto;
+                width: 100%;
+                padding: 25px;
+                border: 1px #999999 solid;
+                border-radius: 13px;
+            }
+            #detailPanel {
+                
+                width: 420px;
+            }
+        </style>
+        <div id="profilePanel">
+            <div id="detailPanel">
+                <h2>Profile</h2>
+                <table>
+                    <tr>
+                        <td style="width: 250px;">Username</td>
+                        <td>
+                            <h:outputText value="#{empPanelMb.detailAccount.username}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Department</td>
+                        <td>
+                            <h:outputText value="#{empPanelMb.detailAccount.departmentID.departmentName}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Role</td>
+                        <td>
+                            <h:outputText value="#{empPanelMb.convertBooleanToRole(empPanelMb.detailAccount.role)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fullname</td>
+                        <td>
+                            <h:outputText value="#{empPanelMb.detailAccount.fullname}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Birthday</td>
+                        <td>
+                            <h:outputText value="#{empPanelMb.getSimpleDate(empPanelMb.detailAccount.birthday)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>
+                            <h:outputText value="#{empPanelMb.detailAccount.address}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>
+                            <h:outputText value="#{empPanelMb.detailAccount.email}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>
+                            <h:outputText value="#{empPanelMb.detailAccount.phone}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>
+                            <h:outputText value="#{empPanelMb.convertBooleanToGender(empPanelMb.detailAccount.gender)}"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

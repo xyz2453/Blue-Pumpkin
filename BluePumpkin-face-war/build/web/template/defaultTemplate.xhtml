@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <script>
+            window.CKEDITOR_BASEPATH = '#{request.contextPath}/resources/js/ckeditor/';
+        </script>
+        <f:event type="preRenderView" listener="#{loginMb.checkCurAccount()}" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>Blue Pumpkin</title>
+        <style>
+            header {
+                margin: 0 auto;
+                text-align: center;
+                min-width: 1000px;
+                min-height: 200px;
+            }
+            nav {  
+                margin: 0 auto;
+                padding-top: 5px;
+                align-content: center;
+                min-width: 1100px;
+                max-width: 1100px;
+                border-bottom: 1px solid #d1d1e0;
+            }
+            nav ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #f9fbff;
+            }
+
+            nav li {
+                width: 130px;
+                float: left;
+                border-right: 1px solid white;
+            }
+
+            nav li:last-child {
+                border-right: none;
+            }
+
+            nav li a {
+                font-family: Tahoma;
+                display: block;
+                color: #666699;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            nav li a:hover {
+                background-color: #ccddff;
+            }
+
+            main {
+                padding-top: 10px;
+            }
+
+            section {
+                margin: 0 auto;
+                max-width: 900px;
+                min-width: 900px;
+                border-top: 1px solid #d1d1e0;
+                border-left: 1px solid #d1d1e0;
+                border-right: 1px solid #d1d1e0;
+                border-bottom: 1px solid #d1d1e0;
+                padding: 10px;
+                font-family: arial;
+                color: #3e433e;
+                font-size: 17px;
+            }
+
+            footer {
+                background: #282e28;
+                margin: 0 auto;
+                min-width: 1000px;
+                max-width: 1000px;
+                color: white;
+                font-family: arial;
+                font-size: 11px;
+                padding: 50px;
+            }
+    </style>
+    </h:head>
+
+    <h:body>
+        
+        <div id="content-holder">
+        <header>
+            <img src="#{request.contextPath}/resources/image/banner.png"/>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="#{request.contextPath}/index.xhtml">Home</a></li>
+                <li><a href="#{request.contextPath}/news/index.xhtml">News</a></li>
+                <li><a href="#{request.contextPath}/event/index.xhtml">Event</a></li>
+                <li><a href="#{request.contextPath}/faq.xhtml">FAQ</a></li>
+                <li><a href="#{request.contextPath}/about.xhtml">About</a></li>
+                <li><a href="#{request.contextPath}/contract.xhtml">Contact</a></li>
+                
+                <c:if test="#{loginMb.curAccount != null}">
+                    <c:choose>
+                        <c:when test="#{loginMb.curAccount.role}">
+                            <li><a href="#{request.contextPath}/admin/index.xhtml">Account</a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li><a href="#{request.contextPath}/emp/index.xhtml">Account</a></li>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+
+                <li><a href="#{request.contextPath}/logout.xhtml">Logout</a></li>
+            </ul>
+        </nav>
+        <div id="top">
+            <c:if test="#{request.requestURI.contains('/emp/')}">
+                <c:if test="#{loginMb.curAccount != null and loginMb.curAccount.role}">
+                    #{newsMb.redirect('index.xhtml')}
+                </c:if>
+            <style>
+                #accoutNav {  
+                    margin: 0 auto;
+                    padding-top: 0px;
+                    align-content: center;
+                    min-width: 1100px;
+                    max-width: 1100px;
+                    border: none;
+                }
+                #accoutNav ul {
+                    width: 550px;
+                    list-style-type: none;
+                    margin: 0 auto;
+                    padding: 0;
+                    overflow: hidden;
+                    background-color: #036fab;
+                }
+
+                #accoutNav li {
+                    width: 130px;
+                    float: left;
+                    border: none;
+                }
+
+                #accoutNav li:last-child {
+                    border-right: none;
+                }
+
+                #accoutNav li a {
+                    font-family: Tahoma;
+                    display: block;
+                    color: #666699;
+                    text-align: center;
+                    padding: 14px 16px;
+                    text-decoration: none;
+                }
+
+                #accoutNav li a:hover {
+                    background-color: #ccddff;
+                }
+            </style>
+            <nav id="accoutNav">
+                <ul>
+                <li><a href="#{request.contextPath}/emp/selfDetail.xhtml">Profile</a></li>
+                <li><a href="#{request.contextPath}/emp/accountSearch.xhtml">Employee</a></li>
+                <li><a href="#{request.contextPath}/emp/supportSearch.xhtml">Support</a></li>
+                <li><a href="#{request.contextPath}/emp/group.xhtml">Group</a></li>
+                </ul>
+            </nav>
+            </c:if>
+            <ui:insert name="top">
+                
+            </ui:insert>
+        </div>
+            <div id="content" class="right_content">
+                <ui:insert name="content">Content</ui:insert>
+            </div>
+        
+        <footer>
+        @ 2016 EPJ4-G5. All rights reserved
+        </footer>
+        </div>
+    </h:body>
+
+</html>

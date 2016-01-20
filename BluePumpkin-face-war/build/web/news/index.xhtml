@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../template/defaultTemplate.xhtml">
+
+            <ui:define name="top">
+            </ui:define>
+
+            <ui:define name="content">
+                <f:event type="preRenderView" listener="#{newsMb.findAllNews()}" />
+                <style>
+                    .flag {
+                        padding: 10px;
+                        width: fit-content;
+                        height: fit-content;
+                        background: #036fab;
+                        color: whitesmoke;
+                    }
+                    #recentContainer {
+                        min-width: 700px;
+                        max-width: 700px;
+                        border: 1px #a8a8a8 solid;
+                        padding: 10px;
+                    }
+                    
+                    #headlineTitle {
+                        padding: 10px 0 0 0;
+                        font-weight: bold;
+                    }
+                    #headlineTitle a {
+                        text-decoration: none;
+                        color:#540000;
+                        font-size: 18px;
+                    }
+                    #headlineAuthor {
+                        color:#a6afa7;
+                    }
+                    #headlineThumbnail{
+                        min-width: 100%;
+                        text-align: center;
+                    }
+                    #headlineThumbnail img{
+                        padding-top: 10px;
+                        margin: 0 auto;
+                        height: 250px;
+                    }
+                    #headlineContent {
+                        padding-top: 20px;
+                    }
+                    #menuContainer {
+                        text-align: center;
+                        min-width: 310px;
+                        max-width: 310px;
+                        border: 1px #a8a8a8 solid;
+                        padding: 20px;
+                    }
+                    
+                    #headlinePanel {
+                        display: inline-block;
+                    }
+                    #menuPanel {
+                        display: inline-block;
+                        vertical-align: top;
+                    }
+                    
+                    .menu { 
+                        padding: 10px 50px 10px 50px;
+
+                    }
+                    
+                    #morePanel {
+                        margin: 10px 0 0 0;
+                    }
+                    #moreContainer {
+                        width: 1040px;
+                        border: 1px #a8a8a8 solid;
+                        padding: 20px;
+                    }
+                    .moreNews {
+                        border-bottom: 1px #8f8f8f solid;
+                        padding: 10px;
+                    }
+                    
+                    #moreNewsThumbnail {
+                        
+                    }
+                    #moreNewsAuthor {
+                        padding-left: 30px;
+                        color:#a6afa7;
+                    }
+                    #moreNewsContent {
+                        padding-top: 40px;
+                        padding-left: 30px;
+                    }
+                    #moreNewsTitle {
+                        padding-left: 30px; 
+                    }
+                    #moreNewsTitle a {
+                        text-decoration: none;
+                        color:#540000;
+                        font-size: 18px;
+                        font-weight: bold;
+                    }
+                </style>
+                <h:form>
+                <div id="index">
+                    
+                    <div id="headlinePanel">
+                        <div class="flag">
+                            Newest
+                        </div>
+                        <div id="recentContainer">
+                            <div id="headline">
+                                <div id="headlineTitle">
+                                    <a href="#{request.contextPath}/news/detail.xhtml?id=#{newsMb.newsList.get(0).getNewsID()}">
+                                        #{newsMb.newsList.get(0).getNewsTitle()}
+                                    </a>
+                                </div>
+                                <div id="headlineAuthor">
+                                    Posted by #{newsMb.newsList.get(0).getUsername().getFullname()} at #{newsMb.getSimpleDate(newsMb.newsList.get(0).getNewsID())}
+                                </div>
+                                <div id="headlineThumbnail">
+                                    <img src="#{newsMb.newsList.get(0).getNewsThumbnail()}"/>
+                                </div>
+                                <div id="headlineContent">
+                                    <h:outputText escape="false" value="#{newsMb.newsList.get(0).getNewsContent()}"/>
+                                    ..
+                                    <a href="#{request.contextPath}/news/detail.xhtml?id=#{newsMb.newsList.get(0).getNewsID()}">more</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="menuPanel">
+                        <div class="flag">
+                            Menu
+                        </div>
+                        <div id="menuContainer">
+                            <c:if test="#{loginMb.curAccount != null and loginMb.curAccount.role}">
+                                <a class="menu" href="#{request.contextPath}/news/create.xhtml">Create</a>
+                            </c:if>
+                            <div style="padding-top: 30px;">
+                                <a class="menu" href="#{request.contextPath}/news/search.xhtml">Advance Search</a>
+                            </div>
+                            <div id="quickSearchContainer" style="text-align: left; padding-top: 15px; width: 200px; margin: 0 auto;">
+                                <h3>Quick search</h3>
+                                <h:inputText binding="#{quickSearchString}"/>
+                                <h:commandButton value="Search" action="#{newsMb.redirect('news/search.xhtml?quickQuery='.concat(quickSearchString.value))}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="morePanel">
+                        <div class="flag">
+                            Older news
+                        </div>
+                        <div id="moreContainer">
+                            <table>
+                                
+                                <ui:repeat value="#{newsMb.newsList}" offset="1" var="item" step="1" varStatus="loop">
+                                    <tr>
+                                        <td>
+                                            <div class="moreNews">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <div id="moreNewsThumbnail">
+                                                                <img width="200" height="125" src="#{item.getNewsThumbnail()}"/>
+                                                            </div>
+                                                        </td>
+                                                        <td style="vertical-align: top;">
+                                                            <div id="moreNewsTitle">
+                                                                <a href="#{request.contextPath}/news/detail.xhtml?id=#{item.getNewsID()}">
+                                                                #{item.getNewsTitle()}
+                                                                </a>
+                                                            </div>
+                                                            <div id="moreNewsAuthor">
+                                                                Posted by #{item.getUsername().getFullname()} at #{newsMb.getSimpleDate(item.getNewsID())}
+                                                            </div>
+                                                            <div id="moreNewsContent">
+                                                                <h:outputText escape="false" value="#{item.getNewsContent()}"/>
+                                                                ..
+                                                                <a href="#{request.contextPath}/news/detail.xhtml?id=#{item.getNewsID()}">more</a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>  
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
